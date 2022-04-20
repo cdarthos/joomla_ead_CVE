@@ -1,0 +1,31 @@
+version: '3'
+
+
+services:
+  joomla370-db-370:
+    container_name: joomla370-db-370
+    image: darthos/joomla-cve:0.1-db-3.7.0
+
+  joomla370-php-370:
+    container_name: joomla370-php-370
+    image: darthos/joomla-cve:0.1-php-3.7.0
+    depends_on:
+      - mariadb370
+    ports:
+      - "8370:80"
+
+  notebook:
+    container_name: notebook
+    build:
+      context: ./sqlmap
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./sqlmap/notebook:/home/jovyan/notebook
+
+
+
+
+
+

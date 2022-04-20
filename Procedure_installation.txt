@@ -1,0 +1,69 @@
+###### Installation de joomla
+
+
+#Installation de l'application via le docker-compose_install.yml
+#supprimer le contenue de ./joomla/app et de ./mariadb/db pour refaire une installation
+#Pour alleger l'archive, ce dossier n'est pas présent dans l'archive deposé dans l'ENT
+#copie des fichier d'installations depuis l'archive dans ./joomla/app
+
+#Point important de le fichier docker-compose.yml:
+#le dossier /app est rendu accessible au container en lecture/ecriture afin de faire les manipulation d'installation
+
+#=> Lancement de docker-compose_install.yml et suivie de l'installation via http://127.0.0.1:8081
+
+docker-compose -f docker-compose_install.yml up --build
+
+#=> Récupération de la base sql:wget
+#Depuis le repertoire "mariadb"
+docker ps # pour recuperer l'id du container
+docker exec 61be9e09d388 /usr/bin/mysqldump -u root --password=root ead_joomla > db/dump.sql
+
+docker-compose -f docker-compose_install.yml down
+
+
+#sur windows, ouvrir dump.sql dans notepad++ et le reenregistrer
+
+
+###### Lancement de l'application clé en main en local
+
+docker-compose -f docker-compose_local.yml up --build
+
+# recupération des ID des images
+
+docker ps
+#assignation d'un tag
+
+docker tag docker-joomla_mariadb darthos/joomla_db:0.4
+docker tag docker-joomla_php darthos/joomla_php:0.4
+
+#connection au compte
+docker login
+
+#push des images
+docker push darthos/joomla_db:0.4
+docker push darthos/joomla_php:0.4
+
+docker-compose -f docker-compose_local.yml down
+
+#Notre application est désormais poussé dans le repository docker
+#Le fichier docker-compose_final.yml est suffisant à lui seul pour relancer l'application
+
+docker-compose -f docker-compose_final.yml up --build
+
+#Pour utilisater l'application en production, il sera necessaire de modifier la gestion de la base de donnée :
+#ne pas lancer "dump.sql" à chaque demarrage et utilisation d'un volume persistant pour conserver les données
+
+#Choix d'architecture :
+#utilisation d'une image officiel php-apache basé sur debian:
+#L'utilisation d'image officiel permet un support de meilleur qualité en cas de problème,
+#et propose une image maintenue dans le temps => Correctif de sécurité rapide à deployer lors de faille connue
+#Nous choisissons également une image qui intègre php et apache afin de ne pas exposer inutilement le port FastCGI:
+#WARNING: the FastCGI protocol is inherently trusting, and thus extremely insecure to expose outside of a private container network -- unless you know exactly what you are doing (and are willing to accept the extreme risk), do not use Docker's --publish (-p) flag with this image variant.
+
+#Enfin dans le repertoire k8s les fichier necessaire à un deploiment sur kubernetes
+
+kubectl apply -f ./*
+
+#pour récuperer le port qui peret l'accès à l'application
+kubectl get service php
+

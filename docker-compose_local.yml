@@ -1,0 +1,23 @@
+version: '3'
+
+
+services:
+  mariadb:
+    container_name: mariadb370
+    build:
+      context: mariadb370
+      dockerfile: Dockerfile
+    volumes:
+      - ./mariadb370/mysql:/var/lib/mysql
+
+  php:
+    container_name: joomla370
+    build:
+      context: joomla370
+      dockerfile: Dockerfile
+    depends_on:
+      - mariadb
+    ports:
+      - "8081:80"
+
+
