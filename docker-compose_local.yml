@@ -7,8 +7,7 @@ services:
     build:
       context: mariadb370
       dockerfile: Dockerfile
-    volumes:
-      - ./mariadb370/mysql:/var/lib/mysql
+
 
   php:
     container_name: joomla370

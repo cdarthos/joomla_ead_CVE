@@ -1,0 +1,22 @@
+version: '3'
+
+
+services:
+  mariadb371:
+    container_name: mariadb371
+    build:
+      context: mariadb371
+      dockerfile: Dockerfile
+
+
+  joomla371:
+    container_name: joomla371
+    build:
+      context: joomla371
+      dockerfile: Dockerfile
+    depends_on:
+      - mariadb371
+    ports:
+      - "8371:80"
+
+

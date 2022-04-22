@@ -1,0 +1,19 @@
+version: '3.1'
+
+services:
+  joomla:
+    build:
+      context: joomla371
+      dockerfile: Dockerfile_install
+    ports:
+      - 8371:80
+    volumes:
+      - ./joomla371/app:/var/www/html
+    depends_on:
+      - mariadb
+
+  mariadb_install_371:
+    container_name: mariadb_install_371
+    image: mariadb:latest
+    environment:
+      MARIADB_ROOT_PASSWORD: root

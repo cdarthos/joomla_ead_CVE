@@ -2,17 +2,31 @@ version: '3'
 
 
 services:
+
   mariadb:
     container_name: mariadb
     image: darthos/joomla-cve:0.1-db-3.7.0
 
-  joomla370-php-370:
-    container_name: joomla370-php-370
+  joomla370:
+    container_name: joomla370
     image: darthos/joomla-cve:0.1-php-3.7.0
     depends_on:
       - mariadb
     ports:
       - "8370:80"
+
+
+  mariadb371:
+    container_name: mariadb371
+    image: darthos/joomla-cve:0.1-db-3.7.1
+
+  joomla371:
+    container_name: joomla371
+    image: darthos/joomla-cve:0.1-php-3.7.1
+    depends_on:
+      - mariadb371
+    ports:
+      - "8371:80"
 
   notebook:
     container_name: notebook
@@ -23,9 +37,3 @@ services:
       - "8888:8888"
     volumes:
       - ./sqlmap/notebook:/home/jovyan/notebook
-
-
-
-
-
-
