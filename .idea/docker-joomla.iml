@@ -3,8 +3,8 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/venv" />
-      <excludeFolder url="file://$MODULE_DIR$/joomla371/app" />
-      <excludeFolder url="file://$MODULE_DIR$/joomla370/app" />
+      <excludeFolder url="file://$MODULE_DIR$/install/joomla370/app" />
+      <excludeFolder url="file://$MODULE_DIR$/install/joomla371/app" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.9 (docker-joomla-master-3.7.0)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
